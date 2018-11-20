@@ -1,0 +1,17 @@
+{
+  "name": "socket-chat-example",
+  "version": "0.0.1",
+  "description": "my first socket.io app",
+  "dependencies": {
+    "@loopback/context": "^1.1.0",
+    "debug": "^4.1.0",
+    "express": "^4.15.2",
+    "socket.io": "^2.1.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "devDependencies": {
+    "@types/socket.io": "^2.1.0"
+  }
+}
