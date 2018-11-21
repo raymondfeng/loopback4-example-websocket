@@ -1,28 +1,39 @@
 import {Context, instantiateClass} from '@loopback/context';
 import {HttpServer} from '@loopback/http-server';
-import {Server, ServerOptions} from 'socket.io';
+import {Server, ServerOptions, Socket} from 'socket.io';
 import SocketIOServer = require('socket.io');
 import {Constructor} from '@loopback/context';
+import {getWebSocketMetadata} from './decorators/websocket.decorator';
 
 const debug = require('debug')('loopback:websocket');
 
 // tslint:disable:no-any
+export type SockIOMiddleware = (
+  socket: Socket,
+  fn: (err?: any) => void,
+) => void;
+
 export class WebSocketServer extends Context {
   private io: Server;
 
   constructor(
-    private httpServer: HttpServer,
+    public readonly httpServer: HttpServer,
     private options: ServerOptions = {},
   ) {
     super();
     this.io = SocketIOServer(options);
   }
 
-  use(fn: (socket: SocketIOServer.Socket, next: (err?: any) => void) => void) {
-    this.io.use(fn);
+  use(fn: SockIOMiddleware) {
+    return this.io.use(fn);
   }
 
-  route(ControllerClass: Constructor<any>, namespace: string | RegExp) {
+  route(ControllerClass: Constructor<any>, namespace?: string | RegExp) {
+    if (namespace == null) {
+      const meta = getWebSocketMetadata(ControllerClass);
+      namespace = meta && meta.namespace;
+    }
+
     const nsp = namespace ? this.io.of(namespace) : this.io;
     nsp.on('connection', async socket => {
       debug(

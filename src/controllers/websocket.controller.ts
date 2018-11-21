@@ -1,7 +1,9 @@
 import {Socket} from 'socket.io';
 import {inject} from '@loopback/context';
+import {ws} from '../decorators/websocket.decorator';
 
 // tslint:disable:no-any
+@ws({namespace: '/chats'})
 export class WebSocketController {
   constructor(
     @inject('ws.socket')

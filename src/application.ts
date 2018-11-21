@@ -1,11 +1,9 @@
 import {Application, ApplicationConfig} from '@loopback/core';
 import {HttpServer} from '@loopback/http-server';
-import {WebSocketServer} from './websocket.server';
-import {Socket} from 'socket.io';
-import {WebSocketController} from './controllers';
-
 import * as express from 'express';
 import * as path from 'path';
+import {WebSocketController} from './controllers';
+import {WebSocketServer} from './websocket.server';
 
 // tslint:disable:no-any
 
@@ -23,7 +21,7 @@ export class WebSocketDemoApplication extends Application {
     // Create ws server
     const wsServer = new WebSocketServer(this.httpServer);
     this.bind('websocket.server').to(wsServer);
-    wsServer.use((socket: Socket, next: (err?: any) => void) => {
+    wsServer.use((socket, next) => {
       console.log('Global middleware - socket:', socket.id);
       next();
     });

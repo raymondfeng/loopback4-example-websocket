@@ -14,7 +14,8 @@ describe('WebSocketDemoApplication', () => {
   after(async () => await app.stop());
 
   it('connects to websocket server', async () => {
-    const socket = io('http://localhost:3000/chats/1');
+    const url = app.wsServer.httpServer.url;
+    const socket = io(`${url}/chats/1`);
     socket.emit('chat message', 'Test');
     const reply = await pEvent(socket, 'chat message');
     expect(reply).to.match(/\[\/chats\/1\#.+\] Test/);
@@ -22,7 +23,7 @@ describe('WebSocketDemoApplication', () => {
   });
 
   async function givenApp() {
-    app = new WebSocketDemoApplication({websocket: {port: 3000}});
+    app = new WebSocketDemoApplication({websocket: {port: 0}});
     await app.start();
   }
 });
