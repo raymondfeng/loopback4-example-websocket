@@ -1,0 +1,28 @@
+// Copyright IBM Corp. 2018. All Rights Reserved.
+// Node module: @loopback/example-shopping
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
+import * as io from 'socket.io-client';
+const pEvent = require('p-event');
+import {WebSocketDemoApplication} from '../..';
+import {expect} from '@loopback/testlab';
+
+describe('WebSocketDemoApplication', () => {
+  let app: WebSocketDemoApplication;
+  before(givenApp);
+  after(async () => await app.stop());
+
+  it('connects to websocket server', async () => {
+    const socket = io('http://localhost:3000/chats/1');
+    socket.emit('chat message', 'Test');
+    const reply = await pEvent(socket, 'chat message');
+    expect(reply).to.match(/\[\/chats\/1\#.+\] Test/);
+    socket.close();
+  });
+
+  async function givenApp() {
+    app = new WebSocketDemoApplication({websocket: {port: 3000}});
+    await app.start();
+  }
+});

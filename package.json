@@ -1,17 +1,62 @@
 {
-  "name": "socket-chat-example",
-  "version": "0.0.1",
-  "description": "my first socket.io app",
+  "name": "loopback4-example-websocket",
+  "version": "1.0.0",
+  "description": "loopback4-example-websocket",
+  "keywords": [
+    "loopback-application",
+    "loopback"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=8.9"
+  },
+  "scripts": {
+    "build:apidocs": "lb-apidocs",
+    "build": "lb-tsc es2017 --outDir dist",
+    "build:watch": "lb-tsc --watch",
+    "clean": "lb-clean dist",
+    "lint": "npm run prettier:check && npm run tslint",
+    "lint:fix": "npm run tslint:fix && npm run prettier:fix",
+    "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
+    "prettier:check": "npm run prettier:cli -- -l",
+    "prettier:fix": "npm run prettier:cli -- --write",
+    "tslint": "lb-tslint",
+    "tslint:fix": "npm run tslint -- --fix",
+    "pretest": "npm run clean && npm run build",
+    "test": "lb-mocha --allow-console-logs \"dist/test\"",
+    "posttest": "npm run lint",
+    "test:dev": "lb-mocha --allow-console-logs dist/test/**/*.js && npm run posttest",
+    "prestart": "npm run build",
+    "start": "node .",
+    "prepublishOnly": "npm run test"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "author": "",
+  "license": "",
+  "files": [
+    "README.md",
+    "index.js",
+    "index.d.ts",
+    "dist/src",
+    "dist/index*",
+    "src"
+  ],
   "dependencies": {
     "@loopback/context": "^1.1.0",
-    "debug": "^4.1.0",
+    "@loopback/core": "^1.1.0",
+    "@loopback/http-server": "^1.0.2",
     "express": "^4.15.2",
     "socket.io": "^2.1.1"
   },
-  "scripts": {
-    "start": "node index.js"
-  },
   "devDependencies": {
-    "@types/socket.io": "^2.1.0"
+    "@loopback/build": "^1.0.1",
+    "@loopback/testlab": "^1.0.1",
+    "@types/node": "^10.11.2",
+    "@types/socket.io": "^2.1.0",
+    "@types/socket.io-client": "^1.4.32",
+    "p-event": "^2.1.0",
+    "socket.io-client": "^2.1.1"
   }
 }
