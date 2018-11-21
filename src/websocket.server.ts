@@ -1,9 +1,9 @@
-import {Context, instantiateClass} from '@loopback/context';
+import {Constructor, Context} from '@loopback/context';
 import {HttpServer} from '@loopback/http-server';
 import {Server, ServerOptions, Socket} from 'socket.io';
-import SocketIOServer = require('socket.io');
-import {Constructor} from '@loopback/context';
 import {getWebSocketMetadata} from './decorators/websocket.decorator';
+import {WebSocketControllerFactory} from './websocket-controller-factory';
+import SocketIOServer = require('socket.io');
 
 const debug = require('debug')('loopback:websocket');
 
@@ -13,6 +13,9 @@ export type SockIOMiddleware = (
   fn: (err?: any) => void,
 ) => void;
 
+/**
+ * A websocket server
+ */
 export class WebSocketServer extends Context {
   private io: Server;
 
@@ -24,10 +27,19 @@ export class WebSocketServer extends Context {
     this.io = SocketIOServer(options);
   }
 
+  /**
+   * Register a sock.io middleware function
+   * @param fn
+   */
   use(fn: SockIOMiddleware) {
     return this.io.use(fn);
   }
 
+  /**
+   * Register a websocket controller
+   * @param ControllerClass
+   * @param namespace
+   */
   route(ControllerClass: Constructor<any>, namespace?: string | RegExp) {
     if (namespace == null) {
       const meta = getWebSocketMetadata(ControllerClass);
@@ -46,11 +58,16 @@ export class WebSocketServer extends Context {
       // Bind websocket
       reqCtx.bind('ws.socket').to(socket);
       // Instantiate the controller instance
-      await instantiateClass(ControllerClass, reqCtx);
+      await new WebSocketControllerFactory(reqCtx, ControllerClass).create(
+        socket,
+      );
     });
     return nsp;
   }
 
+  /**
+   * Start the websocket server
+   */
   async start() {
     await this.httpServer.start();
     // FIXME: Access HttpServer.server
@@ -58,6 +75,9 @@ export class WebSocketServer extends Context {
     this.io.attach(server, this.options);
   }
 
+  /**
+   * Stop the websocket server
+   */
   async stop() {
     const close = new Promise<void>((resolve, reject) => {
       this.io.close(() => {

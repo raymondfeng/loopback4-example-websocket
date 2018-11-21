@@ -1,37 +1,43 @@
 import {Socket} from 'socket.io';
-import {inject} from '@loopback/context';
 import {ws} from '../decorators/websocket.decorator';
 
-// tslint:disable:no-any
-@ws({namespace: '/chats'})
+/**
+ * A demo controller for websocket
+ */
+@ws('/chats')
 export class WebSocketController {
   constructor(
-    @inject('ws.socket')
-    private readonly socket: Socket,
-  ) {
-    this.init(socket);
-  }
+    @ws.socket() // Equivalent to `@inject('ws.socket')`
+    private socket: Socket,
+  ) {}
 
-  // @ws.connect({rooms: ['room 1']})
-  init(socket: Socket) {
+  /**
+   * The method is invoked when a client connects to the server
+   * @param socket
+   */
+  @ws.connect()
+  connect(socket: Socket) {
+    console.log('Client connected: %s', this.socket.id);
     socket.join('room 1');
-    socket.on('chat message', msg => {
-      this.handleChatMessage(msg);
-    });
-    socket.on('disconnect', () => {
-      this.disconnect();
-    });
   }
 
-  // @ws.subscribe('chat message')
+  /**
+   * Register a handler for 'chat message' events
+   * @param msg
+   */
+  @ws.subscribe('chat message')
   // @ws.emit('namespace' | 'requestor' | 'broadcast')
-  handleChatMessage(msg: any) {
+  handleChatMessage(msg: unknown) {
     console.log('Message: %s', msg);
     this.socket.nsp.emit('chat message', `[${this.socket.id}] ${msg}`);
   }
 
-  // @ws.disconnect()
+  /**
+   * The method is invoked when a client disconnects from the server
+   * @param socket
+   */
+  @ws.disconnect()
   disconnect() {
-    console.log('User disconnected: %s', this.socket.id);
+    console.log('Client disconnected: %s', this.socket.id);
   }
 }

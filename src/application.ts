@@ -13,14 +13,20 @@ export class WebSocketDemoApplication extends Application {
 
   constructor(options: ApplicationConfig = {}) {
     super(options);
+
+    /**
+     * Create an Express app to serve the home page
+     */
     const expressApp = express();
     const root = path.resolve(__dirname, '../../public');
     expressApp.use('/', express.static(root));
+
+    // Create an http server backed by the Express app
     this.httpServer = new HttpServer(expressApp, options.websocket);
 
-    // Create ws server
+    // Create ws server from the http server
     const wsServer = new WebSocketServer(this.httpServer);
-    this.bind('websocket.server').to(wsServer);
+    this.bind('servers.websocket.server1').to(wsServer);
     wsServer.use((socket, next) => {
       console.log('Global middleware - socket:', socket.id);
       next();

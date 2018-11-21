@@ -4,6 +4,7 @@ import {ApplicationConfig} from '@loopback/core';
 export {WebSocketDemoApplication};
 export * from './websocket.server';
 export * from './decorators/websocket.decorator';
+export * from './websocket-controller-factory';
 
 export async function main(options: ApplicationConfig = {}) {
   const app = new WebSocketDemoApplication(options);
