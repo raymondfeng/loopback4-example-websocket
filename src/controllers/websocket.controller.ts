@@ -28,8 +28,17 @@ export class WebSocketController {
   @ws.subscribe('chat message')
   // @ws.emit('namespace' | 'requestor' | 'broadcast')
   handleChatMessage(msg: unknown) {
-    console.log('Message: %s', msg);
+    console.log('Chat message: %s', msg);
     this.socket.nsp.emit('chat message', `[${this.socket.id}] ${msg}`);
+  }
+
+  /**
+   * Register a handler for all events
+   * @param msg
+   */
+  @ws.subscribe(/.+/)
+  logMessage(...args: unknown[]) {
+    console.log('Message: %s', args);
   }
 
   /**

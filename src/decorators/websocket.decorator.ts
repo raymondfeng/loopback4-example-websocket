@@ -54,7 +54,7 @@ export namespace ws {
    * ```
    * @param messageTypes
    */
-  export function subscribe(...messageTypes: string[]) {
+  export function subscribe(...messageTypes: (string | RegExp)[]) {
     return MethodDecoratorFactory.createDecorator(
       'websocket:subscribe',
       messageTypes,
@@ -65,7 +65,7 @@ export namespace ws {
    * Decorate a controller method for `disconnect`
    */
   export function disconnect() {
-    return MethodDecoratorFactory.createDecorator('websocket:disconnect', true);
+    return subscribe('disconnect');
   }
 
   /**
