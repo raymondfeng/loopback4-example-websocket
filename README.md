@@ -1,6 +1,6 @@
 # loopback4-example-websocket
 
-This example is created to explore how to expose Websocket (sock.io) endpoints
+This example is created to explore how to expose Websocket [(socket.io)](https://socket.io) endpoints
 in conjunction with LoopBack controllers.
 
 Similarly as @loopback/rest, each websocket server is attached to an http/https
