@@ -12,16 +12,16 @@
   },
   "scripts": {
     "build:apidocs": "lb-apidocs",
-    "build": "lb-tsc es2017 --outDir dist",
+    "build": "lb-tsc",
     "build:watch": "lb-tsc --watch",
     "clean": "lb-clean dist",
-    "lint": "npm run prettier:check && npm run tslint",
-    "lint:fix": "npm run tslint:fix && npm run prettier:fix",
+    "lint": "npm run prettier:check && npm run eslint",
+    "lint:fix": "npm run eslint:fix && npm run prettier:fix",
     "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
     "prettier:check": "npm run prettier:cli -- -l",
     "prettier:fix": "npm run prettier:cli -- --write",
-    "tslint": "lb-tslint",
-    "tslint:fix": "npm run tslint -- --fix",
+    "eslint": "lb-eslint --cache --report-unused-disable-directives .",
+    "eslint:fix": "npm run eslint -- --fix",
     "pretest": "npm run clean && npm run build",
     "test": "lb-mocha --allow-console-logs \"dist/test\"",
     "posttest": "npm run lint",
@@ -33,8 +33,8 @@
   "repository": {
     "type": "git"
   },
-  "author": "",
-  "license": "",
+  "author": "Raymond Feng",
+  "license": "MIT",
   "files": [
     "README.md",
     "index.js",
@@ -44,19 +44,25 @@
     "src"
   ],
   "dependencies": {
-    "@loopback/context": "^1.1.0",
-    "@loopback/core": "^1.1.0",
-    "@loopback/http-server": "^1.0.2",
-    "express": "^4.15.2",
-    "socket.io": "^2.1.1"
+    "@loopback/context": "^1.23.0",
+    "@loopback/core": "^1.10.2",
+    "@loopback/http-server": "^1.4.13",
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
-    "@loopback/build": "^1.0.1",
-    "@loopback/testlab": "^1.0.1",
+    "@loopback/build": "^2.0.11",
+    "@loopback/testlab": "^1.8.1",
     "@types/node": "^10.11.2",
-    "@types/socket.io": "^2.1.0",
+    "@types/socket.io": "^2.1.2",
     "@types/socket.io-client": "^1.4.32",
-    "p-event": "^2.1.0",
-    "socket.io-client": "^2.1.1"
+    "@typescript-eslint/eslint-plugin": "^2.3.0",
+    "@typescript-eslint/parser": "^2.3.0",
+    "eslint": "^6.4.0",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-eslint-plugin": "^2.1.0",
+    "eslint-plugin-mocha": "^6.1.1",
+    "p-event": "^4.1.0",
+    "socket.io-client": "^2.3.0"
   }
 }

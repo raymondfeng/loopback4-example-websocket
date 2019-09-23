@@ -11,7 +11,7 @@ import {expect} from '@loopback/testlab';
 describe('WebSocketDemoApplication', () => {
   let app: WebSocketDemoApplication;
   before(givenApp);
-  after(async () => await app.stop());
+  after(() => app.stop());
 
   it('connects to websocket server', async () => {
     const url = app.wsServer.httpServer.url;

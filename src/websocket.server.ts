@@ -7,7 +7,7 @@ import SocketIOServer = require('socket.io');
 
 const debug = require('debug')('loopback:websocket');
 
-// tslint:disable:no-any
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type SockIOMiddleware = (
   socket: Socket,
   fn: (err?: any) => void,
@@ -47,6 +47,7 @@ export class WebSocketServer extends Context {
     }
 
     const nsp = namespace ? this.io.of(namespace) : this.io;
+    /* eslint-disable @typescript-eslint/no-misused-promises */
     nsp.on('connection', async socket => {
       debug(
         'Websocket connected: id=%s namespace=%s',
