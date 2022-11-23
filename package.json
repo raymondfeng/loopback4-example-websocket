@@ -48,7 +48,7 @@
     "@loopback/core": "^1.10.2",
     "@loopback/http-server": "^1.4.13",
     "express": "^4.17.1",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.5.0"
   },
   "devDependencies": {
     "@loopback/build": "^2.0.11",
